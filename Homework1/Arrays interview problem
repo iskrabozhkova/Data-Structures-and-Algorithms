@@ -1,0 +1,38 @@
+//Даден ви е масив от цели числа . Намерете първото липсващо положително число от масива.
+
+#include <cmath>
+#include <cstdio>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+using namespace std;
+
+
+int main() {
+     ios::sync_with_stdio(false);
+    std::cin.tie(NULL);   
+    int n;
+    std::cin >> n;
+
+    int arr[1000000];
+    for (int i = 0; i < n; i++) {
+        std::cin >> arr[i];
+    }
+    for (int i = 0; i < n; ++i) {
+        int x = arr[i];
+        while (x > 0 && x <= n && arr[x - 1] != x) { 
+            std::swap(arr[i], arr[x - 1]);
+            x = arr[i];
+        }
+    }
+
+    for (int i = 0; i < n; i++) {
+        if (arr[i] > 0) {
+            if (arr[i] + 1 != arr[i + 1]) {
+                std::cout << arr[i] + 1;
+                break;
+            }
+        }
+    }  
+    return 0;
+}
