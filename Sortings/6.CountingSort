@@ -1,0 +1,49 @@
+#include <iostream>
+#include <algorithm>
+
+ void countingsort(int arr[], int n){
+	int max = 0;
+	for (int i = 0; i < n; i++){
+		if (max < arr[i])
+		{
+			max = arr[i];
+		}
+	}
+	
+	int* freq = new int[max + 1];
+
+	for (int i = 0; i < max + 1; i++){
+		freq[i] = 0;
+	}
+	for (int i = 0; i < n; i++)
+	{
+		freq[arr[i]]++;
+	}
+	for (int i = 0, j = 0; i <= max; i++){
+		while (freq[i] > 0)
+		{
+			arr[j] = i;
+			j++;
+			freq[i]--;
+		}
+	}
+}
+
+
+void PrintArray(int Array[], int n)
+{
+	for (int i = 0; i < n; i++)
+	{
+		std::cout << Array[i] << " ";
+	}
+	std::cout << "\n";
+}
+
+
+int main() {
+	int MyArray[] = { 9, 1, 2, 5, 9 };
+	int n = 5;
+	countingsort(MyArray, n);
+	PrintArray(MyArray, n);
+	return 0;
+}
