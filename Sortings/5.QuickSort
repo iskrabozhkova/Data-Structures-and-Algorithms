@@ -3,15 +3,14 @@
 
 int partition(int arr[], int left, int right)
 {
-	int pivot = arr[right]; // pivot  
-	int i = (left - 1); // Index of smaller element  
+	int pivot = arr[right]; 
+	int i = (left - 1);  
 
 	for (int j = left; j <= right - 1; j++)
 	{
-		// If current element is smaller than the pivot  
 		if (arr[j] < pivot)
 		{
-			i++; // increment index of smaller element  
+			i++; 
 			std::swap(arr[i], arr[j]);
 		}
 	}
