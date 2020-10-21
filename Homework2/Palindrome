@@ -1,0 +1,58 @@
+//Четете последователност от T низа. За всеки един от тях отговорете дали чрез разместване на символите му може да се получи палиндром
+
+#include <cmath>
+#include <cstdio>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+using namespace std;
+
+
+bool isPalindrome(std::string str) {
+    int histogram[26] = { 0 };
+    for (int i = 0; i < str.size(); i++)
+        histogram[str[i] - 'a']++;
+
+    int odd = 0;
+    for (int i = 0; i < 26; i++)
+        if (histogram[i] % 2 == 1)
+            odd++;
+
+    if ((str.size() % 2 == 1 && odd == 1) || (str.size() % 2 == 0 && odd == 0)) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+int main() {
+    std::ios::sync_with_stdio(false);
+        std::cin.tie(NULL);
+        int n;
+        std::cin >> n;
+        std::string str;
+        std::vector<std::string> vector;
+        
+        do {
+            std::cin >> str;
+            vector.push_back(str);
+            n--;
+        } while (n != 0);
+    
+        for (int i = 0; i < vector.size(); i++) {
+            std::sort(str.begin(), str.end());
+
+            do {
+                if (isPalindrome(vector[i])) {
+                    std::cout << "TRUE" << std::endl;
+                    break;
+                }
+                else {
+                    std::cout << "FALSE" << std::endl;
+                    break;
+                }
+            } while (next_permutation(str.begin(), str.end()));
+        }
+    return 0;
+}
