@@ -1,0 +1,70 @@
+На входа получавате N на брой интервала. Трябва да слеете всички възможни интервали и да изведете слетите интервали 
+подредени така както биха били подредени върху числовата ос.
+Интервалите са затворени, т.е ако има интервал [0, 25] и [25, 100] то те може да се слеят защото имат обща точка 25.
+
+#include <cmath>
+#include <cstdio>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+#include <stack>
+using namespace std;
+
+ struct Interval
+ {
+     int start, end;
+ };
+
+
+ bool compare(Interval first, Interval second)
+ {
+     return (first.start < second.start);
+ }
+
+ void merge(Interval arr[], int n)
+ {
+     if (n <= 0)
+         return;
+ 
+     std::stack<Interval> stack;
+     sort(arr, arr + n, compare);
+     stack.push(arr[0]);
+
+     for (int i = 1; i < n; i++)
+     {
+         Interval top = stack.top();
+
+         if (top.end < arr[i].start)
+             stack.push(arr[i]);
+
+         else if (top.end < arr[i].end)
+         {
+             top.end = arr[i].end;
+             stack.pop();
+             stack.push(top);
+         }
+     }
+         while (!stack.empty())
+         {
+             Interval top = stack.top();
+             cout << top.start << " "<< top.end;
+             stack.pop();
+         }
+     return;
+ }
+
+
+ int main()
+ {
+     Interval array[1000000];
+     int n;
+     std::cin >> n;
+     for (int i = 0; i < n; i++) {
+         std::cin >> array[i].start;
+         std::cin >> array[i].end;
+
+     }
+
+     merge(array, n);
+     return 0;
+ }
