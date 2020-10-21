@@ -1,0 +1,42 @@
+//Даден ви е масив ,който започва празен и последователно му се добавят  на брой цели числа. 
+//Вашата задача е да определите каква е медианата на масива след всяко добавяне на елемент в него.
+
+#include <cmath>
+#include <cstdio>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+using namespace std;
+
+
+int main() {
+    std::ios::sync_with_stdio(false);
+    std::cin.tie(NULL);
+   int n;
+    std::cin >> n;
+    int  arr[30000];
+    
+    for (int i = 0; i < n; i++) {
+        std::cin >> arr[i];        
+    }
+
+    std::cout << arr[0] << std::endl;
+
+
+        for (int i = 1; i < n; i++) {
+            for (int j = i; j > 0 && arr[j] < arr[j - 1]; j--) {
+                std::swap(arr[j], arr[j - 1]);
+            }
+            if ((i + 1) % 2 == 0) {
+                double temp = (arr[(i) / 2] + arr[(i + 1) / 2]) / 2.0;
+                std::cout << temp << std::endl;
+            }
+            else {
+                double other = double(arr[(i + 1) / 2]);
+                std::cout << other << std::endl;
+            }
+        }
+        
+  
+    return 0;
+}
