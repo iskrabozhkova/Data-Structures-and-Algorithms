@@ -1,0 +1,30 @@
+//1st way
+int binarySearch(int* array, int arraySize, int x) {
+	int left = 0, right = arraySize - 1;
+	while (left <= right) {
+		int mid = (left + right) / 2;
+		if (array[mid] < x) {
+			left = mid + 1;
+		}
+		else {
+			right = mid - 1;
+		}
+	}
+	return right + 1;
+}
+
+
+//2nd way
+int binarySearch(int* array, int arraySize, int x) {
+    int ans = arraySize;
+    int left = 0, right = arraySize - 1;
+    while (left <= right) {
+        int mid = (left + right) / 2;
+        if (array[mid] < x)
+            left = mid + 1;
+        else
+            right = mid - 1;
+            ans = mid;
+    }
+    return ans;
+}
