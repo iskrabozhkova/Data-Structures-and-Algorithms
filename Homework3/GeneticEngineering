@@ -1,0 +1,39 @@
+#include <cmath>
+#include <cstdio>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+
+using namespace std;
+long long arr[100000];
+
+int ternary_search(long long left, long long right, long long index, long long count){  
+    long long mid1 = left + ((right - left) / 3);
+    long long mid2 = right - ((right - left) / 3);
+     if (mid1 == mid2){
+        return count;
+    } 
+        if (index <= mid1){
+            return ternary_search(left, mid1, index, count + 1);
+        }
+    if (index >= mid2){
+        return ternary_search(mid2, right, index, count + 1);
+    }
+    return count;
+}
+
+int main()
+{
+    long long count = 1;
+    long long p = 0;
+    long long n = 0;
+    cin >> p >> n;
+    for (int i = 0; i < n; i++){
+        cin >> arr[i];   
+    }
+    for (int i = 0; i < n; i++){
+        cout << ternary_search(1, pow(3, p), arr[i], count) << endl;
+    }
+
+    return 0;
+}
