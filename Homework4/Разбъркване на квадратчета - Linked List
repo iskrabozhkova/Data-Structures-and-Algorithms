@@ -1,0 +1,33 @@
+#include <cmath>
+#include <cstdio>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+#include <list>
+using namespace std;
+
+
+
+int main() {
+    std::ios::sync_with_stdio(false);
+    std::cin.tie(NULL);
+    int n, x, y;
+    std::list<int> List;
+    std::cin >> n >> x >> y;
+    for (int i = 0; i < n; i++) {
+        int number;
+        std::cin >> number;
+        List.push_back(number);
+    }
+    for (int i = 0; i < n; i += x + y) {
+        std::list<int>::iterator it = List.begin();
+        for (int j = 0; j < i; j++) {
+            it++;
+        }
+        reverse(it, std::next(it, i + x > n ? n - i : x));
+    }
+
+    for (auto iter = List.begin(); iter != List.end(); iter++) {
+        std::cout << *iter << std::endl;
+    }
+}
