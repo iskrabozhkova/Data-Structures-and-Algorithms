@@ -1,0 +1,27 @@
+SinglyLinkedListNode* insertNodeAtPosition(SinglyLinkedListNode* head, int data, int position) {
+if (position == 0) {
+        SinglyLinkedListNode* newHead = new SinglyLinkedListNode(data);
+        newHead->next = head;
+        head = newHead;
+        return head;
+    }
+    else if (head == nullptr) {
+        throw std::out_of_range("Invalid insert index, empty list");
+    }
+
+    SinglyLinkedListNode* curr = head;
+    SinglyLinkedListNode* prev = nullptr;
+    for (int i = 0; i < position; i++) {
+        if (curr != nullptr) {
+            prev = curr;
+            curr = curr->next;
+        }
+        else {
+            throw std::out_of_range("Invalid position");
+        }
+    }
+    SinglyLinkedListNode* newNode = new SinglyLinkedListNode(data);
+    newNode->next = curr;
+    prev->next = newNode;
+    return head;
+}
