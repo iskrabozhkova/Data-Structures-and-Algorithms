@@ -1,0 +1,73 @@
+#include <cmath>
+#include <cstdio>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+#include <stack>
+using namespace std;
+
+
+
+class MinStack {
+public:
+    int minimum;
+std::stack<int> stack;
+std::stack<int> minStack;
+    void push(int x) {
+        if (stack.empty()) {
+            stack.push(x);
+            minimum = x;
+            minStack.push(minimum);
+        }
+        else {
+            stack.push(x);
+            minimum = std::min(minStack.top(), stack.top());
+            minStack.push(minimum);
+        }
+        
+    }
+    void pop() {
+            stack.pop();
+            minStack.pop();
+    }
+
+    int peek() {
+            return stack.top();
+    }
+
+    int min() {
+            return minStack.top();
+    }
+};
+
+int main() {
+    std::ios::sync_with_stdio(false);
+    std::cin.tie(NULL);
+    std::cout.tie(NULL);
+    int n;
+    std::cin >> n;
+    std::string request;
+    MinStack stack;
+
+    for (int i = 0; i < n; i++) {
+        std::cin >> request;
+        if (request == "push") {
+            int x = 0;
+            std::cin >> x;
+            stack.push(x);
+        }else if (request == "pop") {
+            stack.pop();
+         
+        }
+        else if (request == "peek") {
+            std::cout << stack.peek();
+            std::cout << std::endl;
+        }
+        else if (request == "min") {
+            std::cout << stack.min();
+            std::cout << std::endl;
+        }
+    }
+    return 0;
+}
+
