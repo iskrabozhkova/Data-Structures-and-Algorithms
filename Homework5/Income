@@ -1,0 +1,46 @@
+#include <cmath>
+#include <cstdio>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+#include <queue>
+using namespace std;
+
+
+int main() {
+    std::ios::sync_with_stdio(false);
+    std::cin.tie(NULL);
+    std::cout.tie(NULL);
+
+    long n, k;
+    std::cin >> n >> k;
+
+    std::queue<int> queue;
+    long number, sum = 0, count = 0;
+    long minCount = n;
+    bool isFound = false;
+    long i = 0;
+    
+    while(i < n){
+        std::cin >> number;
+        queue.push(number);
+        sum += number;
+        count++;
+
+        while (sum >= k) {
+            sum = sum - queue.front();
+            queue.pop();
+            if (minCount >= count) {
+                minCount = count;
+                isFound = true;
+            }
+            count--;
+        }
+        i++;
+    }
+    if (isFound == false) {
+        std::cout << -1;
+    }else{
+        std::cout << minCount;
+    }
+}
