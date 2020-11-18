@@ -1,0 +1,50 @@
+#include <cmath>
+#include <cstdio>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+using namespace std;
+
+const int SIZE = 1000000;
+vector<int> children[SIZE];
+int arr[SIZE], presentsCount = 0, n = 0, x = 0, y = 0;
+
+void dfs(int root){
+    presentsCount++;
+    for (int i = 0; i < children[root].size(); i++){
+        dfs(children[root][i]);
+    }
+}
+int main() {
+    std::ios::sync_with_stdio(false);
+    std::cin.tie(NULL);
+    std::cout.tie(NULL);
+    
+    cin >> n;
+    arr[0] = 0;
+    
+    int j = 1;
+    for (int i = 0; i < n - 1; i++){
+        cin >> x >> y;
+        children[x].push_back(y);
+        if (x != arr[j - 1]){
+            arr[j] = x;
+            j++;
+        }
+    }
+    
+    int k = 0;
+    for (int i = 0; i < n; i++){
+        if (arr[k] == i){
+            for (int j = 0; j < children[i].size(); j++){
+                dfs(children[i][j]);
+            }
+            cout << presentsCount << " ";
+            presentsCount = 0;
+            k++;
+        }else{
+            cout << 0 << " ";
+        }
+    }
+    return 0;
+}
