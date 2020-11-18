@@ -1,0 +1,74 @@
+#include <cmath>
+#include <cstdio>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+using namespace std;
+
+struct Node {
+    Node* children[26];
+    bool isEndOfWord;
+};
+
+Node* getNode() {
+    Node* temp = new Node;
+    temp->isEndOfWord = false;
+
+    for (int i = 0; i < 26; i++) {
+        temp->children[i] = NULL;
+    }
+    return temp;
+}
+
+void insert(Node* root, std::string word) {
+    Node* temp = root;
+
+    for (int i = 0; i < word.length(); i++) {
+        int index = word[i] - 'a';
+        if (!temp->children[index])
+            temp->children[index] = getNode();
+
+        temp = temp->children[index];
+    }
+    temp->isEndOfWord = true;
+}
+bool search(struct Node* root, std::string word)
+{
+    Node* temp = root;
+
+    for (int i = 0; i < word.length(); i++) {
+        int index = word[i] - 'a';
+        if (!temp->children[index])
+            return false;
+
+        temp = temp->children[index];
+    }
+    return (temp != NULL && temp->isEndOfWord);
+}
+int main(){
+     std::ios::sync_with_stdio(false);
+    std::cin.tie(NULL);
+    std::cout.tie(NULL);
+    int n;
+    std::cin >> n;
+    std::string dictionaryWord;
+    Node* root = getNode();
+    for (int i = 0; i < n; i++) {
+        std::cin >> dictionaryWord;
+        insert(root, dictionaryWord);
+        
+    }
+    int q;
+    std::string wordToSearch;
+    std::cin >> q;
+    for (int i = 0; i < q; i++) {
+        std::cin >> wordToSearch;
+        if (search(root, wordToSearch)) {
+            std::cout << "YES" << std::endl;
+        }
+        else {
+            std::cout << "NO" << std::endl;
+        }
+    }
+    return 0;
+}
