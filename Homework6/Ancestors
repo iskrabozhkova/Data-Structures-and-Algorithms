@@ -1,0 +1,61 @@
+#include <cmath>
+#include <cstdio>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+using namespace std;
+
+bool visited[1000000];
+std::vector<int> children[1000000];
+int inTime[1000000];
+int outTime[1000000];
+int times = 0;
+int x, y, q;
+int k, p;
+
+void dfs(std::vector<int> children[], int v) {
+    visited[v] = true;
+    times++;
+    inTime[v] = times;
+
+    for (vector<int>::iterator it = children[v].begin(); it < children[v].end(); it++) {
+        if (visited[*it] == false)
+            dfs(children, *it);
+    }
+
+    times++;
+    outTime[v] = times;
+}
+bool isQueryTrue(int x, int y) {
+    if (inTime[x] < inTime[y] && outTime[x] > outTime[y]) {
+        return true;
+    }
+        return false;
+}
+
+int main() {
+    int n;
+    std::cin >> n;
+
+    for (int i = 0; i < n- 1; i++) {
+        std::scanf("%d", &k);
+        std::scanf("%d", &p);
+        children[k].push_back(p);
+    }
+
+    dfs(children, 0);
+    std::scanf("%d", &q);
+
+    for (int i = 0; i < q; i++) {
+        std::scanf("%d", &x);
+        std::scanf("%d", &y);
+        if (isQueryTrue(x, y) == true) {
+            std::printf("YES\n");
+        }
+        else {
+            std::printf("NO\n");
+        }
+    }
+
+    return 0;
+}
