@@ -1,0 +1,45 @@
+#include <iostream>
+#include <set>
+#include <string>
+#include <map>
+
+int n;
+std::string name;
+std::map<std::string, int> mapNames;
+std::set<std::string> setPrefixes;
+
+int main() {
+    std::ios_base::sync_with_stdio(false);
+    std::cin.tie(nullptr);
+    std::cin >> n;
+    
+    for (int i = 0; i < n; i++) {
+        std::cin >> name;
+      
+        std::string prefix = "";
+        bool flag = true;
+        
+        for (int j = 0; j < name.size(); j++) {
+            prefix.push_back(name.at(j));
+            
+            if(setPrefixes.find(prefix) == setPrefixes.end()){
+                if(flag == true){
+                    std::cout << prefix << '\n';
+                    flag = false;
+                }
+            }
+            setPrefixes.insert(prefix);
+        }
+        if (mapNames.count(name) == 0) {
+            mapNames[name] = 1;
+            if (flag == true) {
+                std::cout << prefix << '\n';
+            }
+        }else {
+            mapNames[name]++;
+            std::cout << name << " " << mapNames[name] << '\n';
+        }
+    }
+    
+    return 0;
+}
