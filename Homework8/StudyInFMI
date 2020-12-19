@@ -1,0 +1,40 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+struct Compare {
+    bool operator()(int a, int b) const{
+        return a > b;
+    }
+};
+
+int main() {
+   std::ios_base::sync_with_stdio(false);
+    std::cin.tie(nullptr);
+    
+    int n;
+    std::cin >> n;
+    int start, end;
+    int count = 0;
+    
+    std::priority_queue<int, std::vector<int>,  Compare> startQueue;
+    std::priority_queue<int, std::vector<int>,  Compare> endQueue;
+    
+
+    for (int i = 0; i < n; i++) {
+        std::cin >> start >> end;
+        startQueue.push(start);
+        endQueue.push(end);
+    }
+
+    while (!startQueue.empty()) {
+        if (startQueue.top() < endQueue.top()) {
+            count++;
+        }else {
+            endQueue.pop();
+        }
+        startQueue.pop();
+    }
+
+    std::cout << count; 
+    return 0;
+}
