@@ -1,0 +1,36 @@
+#include <iostream>
+#include <set>
+
+int main() {
+    int n, A, k, q, x;
+    std::cin >> n >> k >> A >> q;
+    std::set<int> mySet;
+    
+    int startBound = 1;
+    int endBound = n + 1;
+    
+    mySet.insert(startBound);
+    mySet.insert(endBound);
+
+    int maxShips = (n + 1) / (A + 1);
+
+    for (int i = 1; i <= q; ++i) {
+        std::cin >> x;
+
+        auto upper = mySet.upper_bound(x);
+        auto lower = --mySet.upper_bound(x);
+
+        int temp = (*upper - *lower) / (A + 1);
+        maxShips -= temp;
+        maxShips += ((*upper - x) / (A + 1) + (x - *lower) / (A + 1));
+
+        if (maxShips < k) {
+            std::cout << i;
+            return 0;
+        }
+        mySet.insert(x);
+    }
+
+    std::cout << -1;
+    return 0;
+}
