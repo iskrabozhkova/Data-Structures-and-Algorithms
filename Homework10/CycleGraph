@@ -1,0 +1,50 @@
+#include <iostream>
+#include <vector>
+#include <list>
+
+
+std::vector<std::list<int>> adjList;
+std::vector<bool> visited;
+
+void dfs(int v, bool& flag) {
+    if (visited[v] == true) {
+        flag = true;
+        return;
+    }
+    visited[v] = true;
+    for (const auto& x : adjList[v]) {
+        dfs(x, flag);
+    }
+    visited[v] = false;
+}
+
+int main() {
+    int n, V, E, x, y, weight;
+    std::cin >> n;
+
+    for (int i = 0; i < n; i++) {
+        bool flag = false;
+        std::cin >> V >> E;
+
+        adjList.assign(V, std::list<int>());
+        visited.assign(V, 0);
+
+        for (int j = 0; j < E; j++) {
+            std::cin >> x >> y >> weight;
+            x--;
+            y--;
+            adjList[x].push_back(y);
+        }
+
+        for (int k = 0; k < V; k++) {
+            dfs(k, flag);
+        }
+        if (flag == true) {
+            std::cout << "true ";
+        }else {
+            std::cout << "false ";
+        }
+    }
+    return 0;
+}
+
