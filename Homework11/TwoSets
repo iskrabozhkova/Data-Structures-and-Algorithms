@@ -1,0 +1,85 @@
+#include <iostream>
+#include <cstdio>
+#include <vector>
+#include <list>
+#include <queue>
+#include <climits>
+using namespace std;
+
+typedef pair<int, int> nums;
+
+class Graph {
+    vector<list<nums>> adjList;
+    vector<bool> visited;
+    int v;
+    void clearVisited() {
+        visited.assign(v + 1, 0);
+    }
+
+public:
+    vector<int> paths;
+
+    Graph(int v) : v(v) {
+        adjList.assign(v + 1, list<nums>());
+        paths.assign(v + 1, INT_MAX);
+    }
+
+    void insert(nums v1, nums v2) {
+        adjList[v1.second].push_back(v2);
+        adjList[v2.second].push_back(v1);
+    }
+
+    void djiikstra(int start) {
+        clearVisited();
+        priority_queue<nums, vector<nums>, greater<nums>> pq;
+        pq.push({ 0, start });
+        paths[start] = 0;
+
+        while (!pq.empty()) {
+            int v = pq.top().second;
+            pq.pop();
+            if (visited[v])
+                continue;
+            visited[v] = true;
+
+            for (const auto& neighbour : adjList[v]) {
+                if (visited[neighbour.second] == 1)
+                    continue;
+                if (paths[v] + neighbour.first < paths[neighbour.second]) {
+                    paths[neighbour.second] = paths[v] + neighbour.first;
+                    pq.push({ paths[neighbour.second], neighbour.second });
+                }
+            }
+        }
+    }
+};
+
+int main() {
+    int N, M, x, y, weight, element, number;
+    cin >> N >> M;
+
+    Graph graph(N);
+
+    for (int i = 0; i < M; i++) {
+        cin >> x >> y >> weight;
+        graph.insert({ weight, x }, { weight, y });
+    }
+
+    int K;
+    cin >> K;
+
+    for (int i = 0; i < K; i++) {
+        cin >> element;
+        graph.insert({ 0, element }, { 0, N });
+    }
+
+    int Q;
+    cin >> Q;
+
+    graph.djiikstra(N); 
+
+    for (int i = 0; i < Q; i++) {
+        cin >> number;
+        cout << graph.paths[number] << endl;
+    } return 0;
+}
