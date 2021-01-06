@@ -1,0 +1,135 @@
+#include <iostream>
+#include <vector>
+#include <stack>
+#include <list>
+#include <climits>
+
+using namespace std;
+
+class Node {
+    int v;
+    int weight;
+public:
+    Node(int _v, int _w){
+        v = _v;
+        weight = _w;
+    }
+    int getV() { return v; }
+    int getWeight() { return weight; }
+};
+
+
+class MyGraph {
+    int V;  
+    list<Node>* adjList;  
+    void topSort(int v, bool visited[], stack<int>& Stack);
+
+public:
+    MyGraph(int V);  
+    ~MyGraph();   
+    void addEdge(int u, int v, int weight);
+    void longestPath(int s);
+};
+
+MyGraph::MyGraph(int V) {
+    this->V = V;
+    adjList = new list<Node>[V];
+}
+
+MyGraph::~MyGraph() {
+    delete[] adjList;
+}
+
+
+void MyGraph::addEdge(int u, int v, int weight){
+    Node node(v, weight);
+    adjList[u].push_back(node); 
+}
+  
+void MyGraph::topSort(int v, bool visited[], stack<int>& stack){
+    visited[v] = true; 
+    list<Node>::iterator i;
+    for (i = adjList[v].begin(); i != adjList[v].end(); ++i) {
+        Node node = *i;
+        if (!visited[node.getV()])
+            topSort(node.getV(), visited, stack);
+    } 
+    stack.push(v);
+}
+
+std::vector<int> output;
+std::vector<int> lengthVec;
+
+void MyGraph::longestPath(int s){
+    stack<int> Stack;
+    std::vector<int> distance(V); 
+    std::vector<int> ans(V);
+    ans[s] = 1;
+
+    bool* visited = new bool[V];
+    for (int i = 0; i < V; i++) {
+        visited[i] = false;
+    }
+
+    for (int i = 0; i < V; i++) {
+        if (visited[i] == false) {
+            topSort(i, visited, Stack);
+        }
+    }
+        
+    for (int i = 0; i < V; i++)
+        distance[i] = -INT_MAX;
+    distance[s] = 0;
+
+ 
+    while (Stack.empty() == false) {
+        int u = Stack.top();
+        Stack.pop();
+ 
+        list<Node>::iterator i;
+        if (distance[u] != -INT_MAX) {
+            for (i = adjList[u].begin(); i != adjList[u].end(); ++i) {
+                if (distance[u] + i->getWeight() == distance[i->getV()]) {
+                    ans[i->getV()] = ans[i->getV()] + ans[u];
+                }
+                if (distance[i->getV()] < distance[u] + i->getWeight()) {
+                    distance[i->getV()] = distance[u] + i->getWeight();
+                    ans[i->getV()] = ans[u];
+                }
+            }
+        }
+    }
+    
+ 
+    for (int i = 0; i < V; i++) {
+        output.push_back(distance[i]);
+    }
+    for (int i = 0; i < V; i++) {
+        lengthVec.push_back(ans[i]);
+    }
+        
+    delete[] visited;
+}
+
+int main() {
+    int m, n;
+    int PeshoCity;
+    int girlfriendCity;
+    std::cin >> n >> m;
+
+    MyGraph graph(n);
+    for (int i = 0; i < m; i++) {
+        int from, to, time;
+        std::cin >> from >> to >> time;
+        graph.addEdge(from, to, time);
+    
+    }
+    std::cin >> PeshoCity >> girlfriendCity;
+    graph.longestPath(PeshoCity);
+
+    int length = output[girlfriendCity];
+    std::cout << length  << " ";
+    std::cout << lengthVec[girlfriendCity];
+
+    return 0;
+}
