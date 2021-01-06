@@ -1,0 +1,89 @@
+#include <iostream>
+#include <vector>
+#include <queue>
+#include <algorithm>
+
+
+int matrix[4000][4000];
+bool visited[4000][4000];
+int n;
+
+    
+bool isTrue(int x, int y) {
+        return x >= 0 && y >= 0 && x < n && y < n && matrix[x][y] == 1;
+    }
+    
+int bfs(int x, int y) {
+    int area = 1;
+    std::queue<std::pair<int, int>> queue;
+    queue.push({ x, y });
+    matrix[x][y] = 0;
+
+    std::vector<int> direction({ -1,0,1,0, -1 });
+    int xMin = n, yMin = n, xMax = -1, yMax = -1;
+    
+    while (!queue.empty()){
+        int y = queue.front().first;
+        int x = queue.front().second;
+
+        if (xMin > x) {
+            xMin = x;
+        }
+        
+        if (xMax < x) {
+            xMax = x;
+        }
+        
+        if (yMin > y) {
+            yMin = y;
+        }
+        
+        if (yMax < y) {
+            yMax = y;
+        }
+
+        for (int i = 0; i < 4; i++){
+            int row = y + direction[i];
+            int col = x + direction[i + 1];
+            
+            if (isTrue(row, col) && !visited[row][col]){
+                queue.push({ row,col });
+                visited[row][col] = 1;
+            }
+        }
+        queue.pop();
+    }
+
+    int height = (yMax + 1) - yMin;
+    int width = (xMax + 1) - xMin;
+
+    return height * width;
+}
+int cmp(int first, int second) {
+    return first > second;
+}
+
+int main() {
+    std::cin >> n;
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            int number;
+            std::cin >> number;
+            matrix[i][j] = number;
+        }
+    }
+
+    std::vector<int> result;
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            if (!visited[i][j] && isTrue(i, j) == true)
+            result.push_back(bfs(i, j));
+        }
+    }
+    std::sort(result.begin(), result.end(), cmp);
+
+    for (const auto& res : result) {
+        std::cout << res << " ";
+    }
+    return 0;
+}
