@@ -1,0 +1,61 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+std::vector<std::pair<int, int>> adjList[10000];
+std::pair<int, std::pair<int, int>> edgeList[100000];
+int  minEdge[1000000], n, m, visited[100000], p[100000], depth[100000];
+
+void init() {
+	for (int i = 0; i < n; i++) {
+			p[i] = i;
+			depth[i] = 0;
+	}
+}
+int Find(int v) {
+	if (v == p[v]) {
+		return v;
+	}
+	return p[v] = Find(p[v]);
+}
+void Union(int from, int to) {
+	int rootFrom = Find(from), rootTo = Find(to);
+	if (depth[rootFrom] > depth[rootTo]) {
+		p[rootTo] = rootFrom;
+	}
+	else {
+		p[rootFrom] = rootTo;
+	}
+	if (depth[rootFrom] == depth[rootTo]) {
+		depth[rootTo]++;
+	}
+}
+
+void kruskal() {
+	init();
+	int ans = 0;
+	std::sort(edgeList, edgeList + m);
+	for (int i = 0; i < m; i++) {
+		int from = edgeList[i].second.first;
+		int to = edgeList[i].second.second;
+
+		if (Find(from) != Find(to)) {
+			Union(from, to);
+			ans += edgeList[i].first;
+		}
+	}
+	std::cout << ans << std::endl;
+}
+int main() {
+	int x, y, price;
+	std::cin >> n >> m;
+	for (int i = 0; i < m; i++) {
+		std::cin >> x >> y >> price;
+		adjList[x].push_back({ y, price });
+		adjList[y].push_back({ x, price });
+		edgeList[i] = { price,{x, y} };
+	}
+	kruskal();
+
+
+	return 0;
+}
