@@ -1,0 +1,72 @@
+#include <iostream>
+#include <queue>
+#include <vector>
+
+std::vector<std::pair<int, int>> adjList[1000000];
+std::pair<int, std::pair<int, int>> edgeList[1000000];
+int minEdge[1000000], parent[1000000], visited[1000000], n, m;
+
+void init() {
+	for (int i = 0; i < n; i++) {
+		minEdge[i] = INT_MAX;
+		parent[i] = i;
+		visited[i] = 0;
+	}
+}
+int prim(int v) {
+	minEdge[v] = 0;
+	std::priority_queue<std::pair<int, int>, std::vector<std::pair<int, int>>, std::greater<std::pair<int, int>>> pq;
+	pq.push({ 0, v });
+
+	while (!pq.empty()) {
+		int price = pq.top().first;
+		int current = pq.top().second;
+
+		visited[current] = 1;
+		pq.pop();
+		for (auto neighbour : adjList[current]) {
+			int next = neighbour.first;
+			int nextPrice = neighbour.second;
+			if (minEdge[next] > nextPrice && !visited[next]) {
+				minEdge[next] = nextPrice;
+				parent[next] = current;
+				pq.push({ nextPrice, next });
+
+			}
+		}
+
+	}
+
+	int ans = 0;
+	for (int i = 0; i < n; i++) {
+		ans += minEdge[i];
+		std::cout << i << " " << parent[i] << std::endl;
+	}
+	return ans;
+}
+
+int main() {
+	std::cin >> n >> m;
+	int x, y, price;
+	for (int i = 0; i < m; i++) {
+		std::cin >> x >> y >> price;
+		adjList[x].push_back({ y, price });
+		adjList[y].push_back({ x, price });
+		edgeList[i] = { price, {x, y} };
+	}
+	init();
+	std::cout << prim(0) << std::endl;
+}
+/*
+6 10
+0 1 4
+0 2 4
+0 3 2
+1 2 1
+2 4 5
+2 5 2
+0 4 3
+0 5 3 
+1 4 1
+1 5 1
+*/
